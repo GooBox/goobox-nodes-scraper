@@ -1,0 +1,12 @@
+## Tests
+pytest
+pytest-cov
+pytest-xdist
+coverage
+
+## IPython
+ipython
+ipdb
+
+## Static Analysis
+prospector
