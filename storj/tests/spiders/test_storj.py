@@ -1,0 +1,2 @@
+class TestStorjSpider:
+    pass
