@@ -12,4 +12,6 @@ class StorjNode(Item):
     response_time = scrapy.Field()
     user_agent = scrapy.Field()
     reputation = scrapy.Field()
+    last_timeout = scrapy.Field()
+    timeout_rate = scrapy.Field()
     node_id = scrapy.Field()

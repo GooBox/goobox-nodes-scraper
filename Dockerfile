@@ -3,7 +3,7 @@ FROM python:3.6-alpine
 ENV APP=goobox-nodes-scraper
 ENV WORKDIR=/srv/apps/$APP/app
 ENV LOGDIR=/srv/apps/$APP/logs
-ENV PYTHONPATH='$PYTHONPATH:$WORKDIR'
+ENV PYTHONPATH=$PYTHONPATH:$WORKDIR
 
 # Install system dependencies
 ENV RUNTIME_PACKAGES libxslt libxml2 jpeg tiff libpng zlib

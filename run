@@ -7,20 +7,15 @@ import sys
 from typing import List
 
 from clinner.command import Type as CommandType, command
-from clinner.exceptions import ImproperlyConfigured
 from clinner.run.main import Main as BaseMain
 
-PYTHON = 'python3.6'
-COVERAGE = 'coverage'
-PROSPECTOR = 'prospector'
-HEALTH_CHECK = 'health_check'
 SCRAPY = 'scrapy'
 
 
-@command(command_type=CommandType.SHELL)
+@command(command_type=CommandType.SHELL,
+         parser_opts={'help': 'Scrapy commands'})
 def scrapy(*args, **kwargs) -> List[List[str]]:
-    cmd = [SCRAPY]
-    cmd += args
+    cmd = [SCRAPY] + list(args)
     return [cmd]
 
 
@@ -34,7 +29,7 @@ class Main(BaseMain):
     def add_arguments(self, parser: argparse.ArgumentParser):
         parser.add_argument('--clinner-settings', default='goobox_nodes_scraper.plugin_settings.clinner:Development',
                             help='Clinner settings')
-        parser.add_argument('--scrapy-settings', default='goobox_nodes_scraper.scrapy_settings.production',
+        parser.add_argument('--scrapy-settings', default='goobox_nodes_scraper.scrapy_settings.development',
                             help='Scrapy settings')
 
     def inject_app_settings(self):
@@ -46,5 +41,4 @@ class Main(BaseMain):
 
 
 if __name__ == '__main__':
-    main = Main()
-    sys.exit(main.run())
+    sys.exit(Main().run())

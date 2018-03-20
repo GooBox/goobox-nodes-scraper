@@ -3,3 +3,4 @@ clinner
 
 ## Scrapy
 scrapy
+scrapy-fake-useragent
