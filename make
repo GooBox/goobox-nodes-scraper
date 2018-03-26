@@ -18,10 +18,19 @@ OUTPUT_PATH = f'/srv/apps/{APP_NAME}/output'
 @command(command_type=CommandType.SHELL,
          args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
                (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),),
-         parser_opts={'help': 'Build container'})
+         parser_opts={'help': 'Build docker image'})
 def build(*args, **kwargs) -> List[List[str]]:
-    cmd = shlex.split(f'docker build -t {kwargs["image"]}/{kwargs["tag"]} .') + list(args)
-    return [cmd]
+    tag = ['-t', f'{kwargs["image"]}/{kwargs["tag"]}']
+    return [shlex.split(f'docker build') + tag + ['.'] + list(args)]
+
+
+@command(command_type=CommandType.SHELL,
+         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
+               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),),
+         parser_opts={'help': 'Push docker image'})
+def push(*args, **kwargs) -> List[List[str]]:
+    tag = [f'{kwargs["image"]}/{kwargs["tag"]}']
+    return [shlex.split(f'docker push') + tag + list(args)]
 
 
 @command(command_type=CommandType.SHELL,
