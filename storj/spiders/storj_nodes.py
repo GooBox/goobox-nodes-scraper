@@ -7,25 +7,9 @@ from scrapy import Request
 
 from storj import items
 from core.spiders import Spider
+from storj.utils import StorjNodeDecoder
 
 __all__ = ['StorjNodesSpider']
-
-
-class StorjNodeDecoder(json.JSONDecoder):
-    datetime_format = '%Y-%m-%dT%H:%M:%S.%fZ'
-
-    def decode(self, *args, **kwargs):
-        nodes = super().decode(*args, **kwargs)
-
-        for node in nodes:
-
-            if 'lastSeen' in node:
-                node['lastSeen'] = datetime.datetime.strptime(node['lastSeen'], self.datetime_format)
-
-            if 'lastTimeout' in node:
-                node['lastTimeout'] = datetime.datetime.strptime(node['lastTimeout'], self.datetime_format)
-
-        return nodes
 
 
 class StorjNodesSpider(Spider):
@@ -37,7 +21,7 @@ class StorjNodesSpider(Spider):
         self._step = step
         if last_seen is None:
             self._last_seen_filter = datetime.datetime.utcnow() - datetime.timedelta(days=1)
-            self._last_seen_filter = self._last_seen_filter.replace(hour=0, minute=0, second=0)
+            self._last_seen_filter = self._last_seen_filter.replace(hour=0, minute=0, second=0, microsecond=0)
         else:
             self._last_seen_filter = datetime.datetime.strptime(last_seen, '%Y-%m-%dT%H:%M:%S.%fZ')
 
@@ -52,12 +36,15 @@ class StorjNodesSpider(Spider):
         """
         Parse response, yield a request for next page and generate items from current response.
 
-        :param response: Response.
+        @url https://api.storj.io/contacts
+        @returns requests 1
+        @returns items 1
+        @scrapes port address protocol node_id to_resolve_geolocation
         """
         nodes = [i for i in json.loads(response.body, cls=StorjNodeDecoder)
                  if 'lastSeen' in i and i['lastSeen'] > self._last_seen_filter]
         if nodes:
-            yield self._request_page(response.request.meta['page'] + self._step)
+            yield self._request_page(response.request.meta.get('page', 1) + self._step)
 
             for node in nodes:
                 yield from self.parse_node(node)

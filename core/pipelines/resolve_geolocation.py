@@ -8,25 +8,30 @@ import geoip2.database
 from geoip2.errors import AddressNotFoundError
 from scrapy.exceptions import DropItem
 
+from core.exceptions import InitializationError
 
-class ResolveGeolocation:
-    def __init__(self, stats):
-        with tempfile.TemporaryDirectory() as tmp:
-            downloaded_file = os.path.join(tmp, 'geolite.tar.gz')
-            urllib.request.urlretrieve('http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz',
-                                       filename=downloaded_file)
-            with tarfile.open(downloaded_file, 'r:gz') as tar:
-                db_file_name = next((i for i in tar.getnames() if i.endswith('.mmdb')))
-                tar.extract(tar.getmember(db_file_name), tmp)
 
-            self.resolver = geoip2.database.Reader(os.path.join(tmp, db_file_name))
+class ResolveGeolocationPipeline:
+    def __init__(self):
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                downloaded_file = os.path.join(tmp, 'geolite.tar.gz')
+                urllib.request.urlretrieve('http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz',
+                                           filename=downloaded_file)
+                with tarfile.open(downloaded_file, 'r:gz') as tar:
+                    db_file_name = next((i for i in tar.getnames() if i.endswith('.mmdb')))
+                    tar.extract(tar.getmember(db_file_name), tmp)
+
+                self.resolver = geoip2.database.Reader(os.path.join(tmp, db_file_name))
+        except StopIteration:
+            raise InitializationError("Cannot find database file with .mmdb extension in downloaded GeoLite2 file")
 
     @classmethod
     def from_crawler(cls, crawler):
-        return cls(crawler.stats)
+        return cls()
 
     def process_item(self, item, spider):
-        if item['to_resolve_geolocation']:
+        if item.get('to_resolve_geolocation'):
             try:
                 host = socket.gethostbyname(item['to_resolve_geolocation'])
                 resolution = self.resolver.city(host)

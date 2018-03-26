@@ -1,1 +1,1 @@
-from storj.spiders.nodes import *  # noqa
+from storj.spiders.storj_nodes import *  # noqa

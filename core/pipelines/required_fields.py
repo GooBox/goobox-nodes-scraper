@@ -1,6 +1,6 @@
 from scrapy.exceptions import DropItem
 
-from core.items import BaseItem
+from core.items import Item
 
 
 class RequiredFieldsPipeline:
@@ -12,7 +12,7 @@ class RequiredFieldsPipeline:
         return cls(crawler.stats)
 
     def process_item(self, item, spider):
-        if isinstance(item, BaseItem):
+        if isinstance(item, Item):
             difference = set(item.get_required_fields()) - set(item.keys())
             if difference:
                 self.stats.inc_value(f'item/{item.__class__.__name__.lower()}/dropped')

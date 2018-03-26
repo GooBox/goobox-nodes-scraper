@@ -2,6 +2,7 @@
 pytest
 pytest-cov
 pytest-xdist
+pytest-freezegun
 coverage
 
 ## IPython

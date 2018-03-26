@@ -4,7 +4,7 @@ import pytest
 import scrapy
 from scrapy.exceptions import DropItem
 
-from core.items import BaseItem
+from core.items import Item
 from core.pipelines.required_fields import RequiredFieldsPipeline
 
 
@@ -15,7 +15,7 @@ class TestRequiredFieldsPipeline:
 
     @pytest.fixture
     def item(self):
-        class FooItem(BaseItem):
+        class FooItem(Item):
             id = scrapy.Field()
             foo = scrapy.Field(required=True)
             bar = scrapy.Field()
@@ -28,8 +28,7 @@ class TestRequiredFieldsPipeline:
         spider.name = 'foo_spider'
         return spider
 
-    @pytest.mark.core
-    @pytest.mark.high
+    @pytest.mark.mid
     def test_from_crawler(self, pipeline):
         expected_call = [call('foo')]
 
@@ -40,7 +39,6 @@ class TestRequiredFieldsPipeline:
 
         assert pipeline_mock.call_args_list == expected_call
 
-    @pytest.mark.core
     @pytest.mark.high
     def test_process_item(self, item, pipeline, spider):
         item['foo'] = 'bar'
@@ -49,22 +47,19 @@ class TestRequiredFieldsPipeline:
 
         assert processed_item == item
 
-    @pytest.mark.core
     @pytest.mark.high
-    def test_process_item_drop(self, item, pipeline, spider):
+    def test_process_item_without_required_field(self, item, pipeline, spider):
         with pytest.raises(DropItem):
             pipeline.process_item(item, spider)
 
-    @pytest.mark.core
-    @pytest.mark.high
+    @pytest.mark.mid
     def test_process_item_drop_with_id(self, item, pipeline, spider):
         item['id'] = 'id'
 
         with pytest.raises(DropItem):
             pipeline.process_item(item, spider)
 
-    @pytest.mark.core
-    @pytest.mark.high
+    @pytest.mark.mid
     def test_process_unknown_item(self, pipeline, spider):
         item = scrapy.Item()
 

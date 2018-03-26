@@ -14,7 +14,7 @@ class TestSpiderBase:
 
     @pytest.mark.low
     def test_logger_property(self, spider: Spider):
-        with patch('core.spiders.base.logging') as mock_logging:
+        with patch('core.spiders.logging') as mock_logging:
             log = spider.logger
 
         assert mock_logging.getLogger.call_count == 1

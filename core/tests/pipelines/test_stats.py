@@ -4,7 +4,7 @@ import datetime
 import pytest
 import scrapy
 
-from core.items import BaseItem
+from core.items import Item
 from core.pipelines.stats import StatsPipeline
 
 
@@ -15,7 +15,7 @@ class TestStatsPipeline:
 
     @pytest.fixture
     def item(self):
-        class FooItem(BaseItem):
+        class FooItem(Item):
             id = scrapy.Field()
             foo = scrapy.Field(required=True)
             bar = scrapy.Field()
@@ -28,8 +28,7 @@ class TestStatsPipeline:
         spider.name = 'foo_spider'
         return spider
 
-    @pytest.mark.core
-    @pytest.mark.high
+    @pytest.mark.mid
     def test_from_crawler(self, pipeline):
         expected_call = [call('foo')]
 
@@ -40,7 +39,6 @@ class TestStatsPipeline:
 
         assert pipeline_mock.call_args_list == expected_call
 
-    @pytest.mark.core
     @pytest.mark.high
     @pytest.mark.freeze_time
     def test_open_spider(self, pipeline, spider):
@@ -50,13 +48,11 @@ class TestStatsPipeline:
 
         assert pipeline.stats.set_value.call_args_list == expected_calls
 
-    @pytest.mark.core
     @pytest.mark.high
     @pytest.mark.freeze_time
     def test_close_spider(self, pipeline, spider):
         expected_calls = [call('spider/foo_spider/finish', datetime.datetime.utcnow())]
-        expected_items = {'crawled_items', 'dropped_items', 'cache_hit', 'cache_miss', 'start_time', 'finish_time',
-                          'item_foo'}
+        expected_items = {'crawled_items', 'dropped_items', 'start_time', 'finish_time', 'item_foo'}
 
         pipeline.stats.get_stats.return_value = {'item/foo': 2, 'item/foo/dropped': 1}
 
@@ -67,7 +63,6 @@ class TestStatsPipeline:
         extra_fields = spider.logger.info.call_args[1]['extra']
         assert set(extra_fields.keys()) == expected_items
 
-    @pytest.mark.core
     @pytest.mark.high
     def test_process_item(self, item, pipeline, spider):
         expected_calls = [call('item/fooitem'), call('spider/foo_spider/foo')]

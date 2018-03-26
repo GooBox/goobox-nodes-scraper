@@ -42,5 +42,7 @@ LOG_LEVEL = 'INFO'
 FAKEUSERAGENT_FALLBACK = 'Mozilla'
 
 ITEM_PIPELINES = {
-    'core.pipelines.resolve_geolocation.ResolveGeolocation': 300,
+    'core.pipelines.resolve_geolocation.ResolveGeolocationPipeline': 100,
+    'core.pipelines.required_fields.RequiredFieldsPipeline': 200,
+    'core.pipelines.stats.StatsPipeline': 900,
 }
