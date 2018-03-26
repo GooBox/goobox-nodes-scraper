@@ -26,8 +26,11 @@ jobs:
     - stage: test
       before_install: pip install codecov
       before_script: "./make build"
-      script: "./make test --source"
+      script:
+        - "./make test --source"
       after_success: codecov -f .test_report/coverage.xml
+    - before_script: "./make build"
+      script: "./make lint --source"
     - stage: deploy
       before_script:
         - "./make build"

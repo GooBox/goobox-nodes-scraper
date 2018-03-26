@@ -1,0 +1,35 @@
+output-format: grouped
+
+strictness: medium
+test-warnings: false
+doc-warnings: false
+autodetect: true
+member-warnings: false
+
+ignore-paths:
+  - tests
+
+ignore-patterns:
+  - make.py
+
+pylint:
+  disable:
+    - protected-access
+    - unused-argument
+    - not-context-manager
+    - raising-bad-type
+    - not-callable
+    - arguments-differ
+
+  options:
+    max-line-length: 120
+    max-args: 8
+
+pep257:
+  disable:
+    - D104
+    - D105
+    - D200
+    - D203
+    - D204
+    - D205

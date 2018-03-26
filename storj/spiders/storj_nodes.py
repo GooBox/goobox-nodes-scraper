@@ -16,7 +16,7 @@ class StorjNodesSpider(Spider):
     name = 'storj_nodes'
     base_url = 'https://api.storj.io/contacts'
 
-    def __init__(self, last_seen=None, step=5, *args, **kwargs):
+    def __init__(self, *args, last_seen=None, step=5, **kwargs):
         super().__init__(*args, **kwargs)
         self._step = step
         if last_seen is None:
