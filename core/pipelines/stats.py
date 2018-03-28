@@ -1,6 +1,5 @@
-import re
-
 import datetime
+import re
 
 __all__ = ['StatsPipeline']
 

@@ -19,5 +19,3 @@ class TestSpiderBase:
 
         assert mock_logging.getLogger.call_count == 1
         assert mock_logging.getLogger.call_args == call(f'spiders.{spider.name}')
-
-

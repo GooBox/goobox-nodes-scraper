@@ -9,7 +9,7 @@ from storj.spiders import StorjNodesSpider
 class TestStorjNodes:
     @pytest.fixture
     def spider(self):
-        return StorjNodesSpider()
+        return StorjNodesSpider(last_seen='1900-1-1T00:00:00.000Z')
 
     @pytest.fixture
     def response(self, storj_node_json):

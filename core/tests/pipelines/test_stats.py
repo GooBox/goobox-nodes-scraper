@@ -1,6 +1,6 @@
+import datetime
 from unittest.mock import MagicMock, Mock, call, patch
 
-import datetime
 import pytest
 import scrapy
 

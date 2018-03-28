@@ -42,8 +42,8 @@ class TestResolveGeolocationPipeline:
         tarfile_mock.__enter__.return_value = tarfile_mock
 
         with patch('core.pipelines.resolve_geolocation.urllib.request.urlretrieve'), \
-                patch('core.pipelines.resolve_geolocation.tarfile.open', return_value=tarfile_mock), \
-                pytest.raises(InitializationError):
+             patch('core.pipelines.resolve_geolocation.tarfile.open', return_value=tarfile_mock), \
+             pytest.raises(InitializationError):
             ResolveGeolocationPipeline()
 
     @pytest.mark.mid
@@ -76,7 +76,7 @@ class TestResolveGeolocationPipeline:
         item['to_resolve_geolocation'] = 'foobar'
 
         with patch('core.pipelines.resolve_geolocation.socket.gethostbyname', side_effect=socket.gaierror), \
-                pytest.raises(DropItem):
+             pytest.raises(DropItem):
             pipeline.process_item(item, spider)
 
     @pytest.mark.mid
