@@ -14,7 +14,7 @@ ENV BUILD_PACKAGES build-base libxslt-dev libxml2-dev libffi-dev jpeg-dev tiff-d
 RUN apk --no-cache add $RUNTIME_PACKAGES
 
 # Create initial dirs
-RUN mkdir -p $APPDIR $LOGDIR $OUTPUT
+RUN mkdir -p $APPDIR $LOGDIR $OUTPUTDIR
 WORKDIR $APPDIR
 
 # Install python requirements

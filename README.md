@@ -13,9 +13,9 @@ image or build it from sources.
 1. *Docker:* Install it following [official docs](https://docs.docker.com/engine/installation/).
 
 ### Use public image
-You can use public docker image to run the service: 
+You can use public docker image to run the service. E.g. run Storj nodes scraper, collect them and put together into a csv format file:
 
-    docker run goobox/goobox-nodes-scraper:latest
+    docker run -v /your/output/dir:/srv/apps/goobox-nodes-service/output goobox/goobox-nodes-scraper:latest scrapy storj_nodes -o output/out.csv -t csv
 
 ### Build from sources
 To build _Goobox Nodes Scraper_ from sources you need to clone this project and build the image.
@@ -45,7 +45,7 @@ The scraper is going to gather Storj node information, generate a csv file and p
 you prefer to generate a different kind of export you can use a different format as specified by 
 [Scrapy's Feed exports](https://doc.scrapy.org/en/latest/topics/feed-exports.html).
 
-    python3.6 make run scrapy crawl storj_nodes -o $OUTPUTDIR/out.csv -t csv
+    python3.6 make run scrapy crawl storj_nodes -o output/out.csv -t csv
 
 Once the scraper has finished you can get the output csv file.
 
