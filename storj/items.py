@@ -15,6 +15,8 @@ class StorjNode(Item):
     last_timeout = scrapy.Field()
     timeout_rate = scrapy.Field()
     node_id = scrapy.Field()
+
+    # Required fields for ResolveGeolocationPipeline
     to_resolve_geolocation = scrapy.Field()
     country = scrapy.Field()
     city = scrapy.Field()
