@@ -62,7 +62,7 @@ class TestResolveGeolocationPipeline:
 
         assert isinstance(pipeline.resolver, geoip2.database.Reader)
 
-        item['to_resolve_geolocation'] = 'www.google.com'
+        item['to_resolve_geolocation'] = '8.8.8.8'
 
         processed_item = pipeline.process_item(item, spider)
 
