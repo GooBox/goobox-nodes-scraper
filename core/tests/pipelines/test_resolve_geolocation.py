@@ -67,9 +67,6 @@ class TestResolveGeolocationPipeline:
         processed_item = pipeline.process_item(item, spider)
 
         assert processed_item['country'] == 'United States'
-        assert processed_item['city'] == 'Mountain View'
-        assert processed_item['latitude'] == 37.419200000000004
-        assert processed_item['longitude'] == -122.0574
 
     @pytest.mark.mid
     def test_process_item_drop_name_not_resolve(self, item, pipeline, spider):
