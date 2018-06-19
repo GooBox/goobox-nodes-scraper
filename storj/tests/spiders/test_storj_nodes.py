@@ -6,7 +6,7 @@ import pytest
 from storj.spiders import StorjNodesSpider
 
 
-class TestStorjNodes:
+class TestCaseStorjNodes:
     @pytest.fixture
     def spider(self):
         return StorjNodesSpider(last_seen="1900-1-1T00:00:00.000Z")

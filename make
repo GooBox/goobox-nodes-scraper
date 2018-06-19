@@ -48,6 +48,7 @@ def run(*args, **kwargs) -> List[List[str]]:
 
 @command(command_type=CommandType.SHELL, parser_opts={"help": "Run tests"})
 def test(*args, **kwargs) -> List[List[str]]:
+    kwargs["source"] = True
     return run("pytest", *args, **kwargs)
 
 

@@ -1,9 +1,6 @@
 BOT_NAME = "GooboxNodes"
 
-SPIDER_MODULES = [
-    "storj.spiders",
-    "sia.spiders",
-]
+SPIDER_MODULES = ["storj.spiders", "sia.spiders"]
 
 DEFAULT_ITEM_CLASS = "core.items.Item"
 

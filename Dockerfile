@@ -9,7 +9,7 @@ ENV OUTPUTDIR=$BASEDIR/output
 ENV PYTHONPATH=$PYTHONPATH:$APPDIR
 
 # Install system dependencies
-ENV RUNTIME_PACKAGES libxslt libxml2 jpeg tiff libpng zlib
+ENV RUNTIME_PACKAGES libxslt libxml2 jpeg tiff libpng zlib libssl1.0
 ENV BUILD_PACKAGES build-base libxslt-dev libxml2-dev libffi-dev jpeg-dev tiff-dev libpng-dev zlib-dev openssl-dev
 RUN apk --no-cache add $RUNTIME_PACKAGES
 

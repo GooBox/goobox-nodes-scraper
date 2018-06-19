@@ -3,7 +3,7 @@ import pytest
 from storj.utils import StorjNodeDecoder
 
 
-class TestStorjNodeDecoder:
+class TestCaseStorjNodeDecoder:
     @pytest.fixture
     def decoder(self):
         return StorjNodeDecoder()
@@ -15,7 +15,7 @@ class TestStorjNodeDecoder:
         assert result == [storj_node]
 
     @pytest.mark.low
-    def test_decode_empty_list(self, decoder):
+    def test_decode_list_with_empty_node(self, decoder):
         result = decoder.decode("[{}]")
 
         assert result == [{}]

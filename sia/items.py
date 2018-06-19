@@ -19,6 +19,7 @@ class SiaNode(Item):
     max_download_batch_size = scrapy.Field()  # maxdownloadbatchsize
     max_duration = scrapy.Field()  # maxduration
     max_revise_batch_size = scrapy.Field()  # maxrevisebatchsize
+    port = scrapy.Field()  # netaddress
     public_key = scrapy.Field()  # publickey
     recent_failed_interactions = scrapy.Field()  # recentfailedinteractions
     recent_successful_interactions = scrapy.Field()  # recentsuccessfulinteractions
