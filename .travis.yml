@@ -10,20 +10,22 @@ env:
   - secure: jQ1phRvivtBKM2k8oUL1ZbhwsQ/v/rnYh7Anml/bpRbpAFokFpg+kZqPfiCvvIzBDeEpTb9K/Z4+V8xGiE3UiB3xZvtsKVCe2XqkGeyMaUAga39E23bANpTX9hU2eBqCrKW/U5WpChAHb+Fng3YCe56EWIVLQ6KTb1cj2yhPhc6H1HXboyB1rgMe3dAA8da9tDpvyrYwrgAotBNRcjosI9XCtv3b1wcqtC9gm+b1/gdK1rbaC7z/zaMLmFHXfmqdF8gtjSJXuLxWR7qleq53YtKNrlpyr6pt5I8IyqgJm0AFulaGVkCQ7MqIIx2NlzodcfXomzcQNWpWPtYpm6RAUNr1rmCkzqwcbOAANz5sHItdOQ8dT7z3ecOvk4aT7jdGbHXIIAPgQ+9ae/WgZT0zFM8t0hJNeQw+Nj0w2sKcCFXsaHi6CMcQy1QV2Mkvoo+pq6mvAk1aXVLB5v/MgHpG7KZd+BJQCIJPlYauHmWqKUEsMbEvu1jj35c7mS/VlnixAvt0Q8AVtjOP4tt04wISUrwtWzPz6seAStNvW6XCibnjidJNvrYfebt6gPP6nBou4nbi5yEYeN8K3ByShMPb3Xd8I4sXeJuQ/7evH2owOg8bCre0OOFdgwhQrvnQbVu+x7C+rXHxYiunBu4iRZT+kAUmTu4wAo4M6gPSrmso6j8=
 stages:
 - test
+- lint
 - name: deploy
   if: branch = master
 install:
 - pip install -U clinner
 jobs:
   include:
+  - stage: lint
+    before_script: "./make build"
+    script: "./make lint"
   - stage: test
     before_install: pip install codecov
     before_script: "./make build"
     script:
     - "./make test"
     after_success: codecov -f .test_report/coverage.xml
-  - before_script: "./make build"
-    script: "./make lint"
   - stage: deploy
     before_script:
     - "./make build"

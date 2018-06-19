@@ -30,18 +30,18 @@ class TestCaseSiaNodes:
     def test_init(self):
         spider = SiaNodesSpider()
 
-        assert spider.start_urls == ["https://sia-node.goobox.io/hostdb/active/"]
+        assert spider.start_urls == ["https://sia-node.goobox.io/hostdb/active"]
 
     @pytest.mark.low
     def test_init_api_url(self):
         spider = SiaNodesSpider(api_url="https://foo.bar")
 
-        assert spider.start_urls == ["https://foo.bar/hostdb/active/"]
+        assert spider.start_urls == ["https://foo.bar/hostdb/active"]
 
     @pytest.mark.mid
     def test_start_requests(self, spider):
         result = list(spider.start_requests())
-        expected_requests = ["https://sia-node.goobox.io/hostdb/active/"]
+        expected_requests = ["https://sia-node.goobox.io/hostdb/active"]
 
         assert [r.url for r in result] == expected_requests
 
