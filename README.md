@@ -15,37 +15,51 @@ image or build it from sources.
 ### Use public image
 You can use public docker image to run the service. E.g. run Storj nodes scraper, collect them and put together into a csv format file:
 
-    docker run -v /your/output/dir:/srv/apps/goobox-nodes-service/output goobox/goobox-nodes-scraper:latest scrapy storj_nodes -o output/out.csv -t csv
+```bash
+docker run -v /your/output/dir:/srv/apps/goobox-nodes-service/output goobox/goobox-nodes-scraper:latest scrapy storj_nodes -o output/out.csv -t csv
+```
 
 ### Build from sources
 To build _Goobox Nodes Scraper_ from sources you need to clone this project and build the image.
 
-    git clone https://github.com/goobox/goobox-nodes-scraper.git & cd goobox-nodes-scraper
-    python3.6 make build
+```bash
+git clone https://github.com/goobox/goobox-nodes-scraper.git & cd goobox-nodes-scraper
+python3.6 make build
+```
 
 Once build is completed you can run the scraper using ``scrapy`` command from the entry point.
 
-    python3.6 make run scrapy
+```bash
+python3.6 make run scrapy
+```
 
 ### Help
 The entry point has a self-describing help that can be queried.
 
-    python3.6 make run -h
+```bash
+python3.6 make run -h
+```
 
 Also, each command has its own help.
 
-    python3.6 make run scrapy -h
-    
+```bash
+python3.6 make run scrapy -h
+```
+
 ### Usage example
 To run the scraper for collecting Storj nodes first create a directory to keep the output.
 
-    mkdir output
+```bash
+mkdir output
+```
 
 The scraper is going to gather Storj node information, generate a csv file and put it into the previous directory. If 
 you prefer to generate a different kind of export you can use a different format as specified by 
 [Scrapy's Feed exports](https://doc.scrapy.org/en/latest/topics/feed-exports.html).
 
-    python3.6 make run scrapy crawl storj_nodes -o output/out.csv -t csv
+```bash
+python3.6 make run scrapy crawl storj_nodes -o output/out.csv -t csv
+```
 
 Once the scraper has finished you can get the output csv file.
 

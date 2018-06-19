@@ -8,14 +8,14 @@ from core.spiders import Spider
 class TestSpiderBase:
     @pytest.fixture
     def spider(self):
-        spider = Spider('test')
+        spider = Spider("test")
         spider.crawler = Mock()
         return spider
 
     @pytest.mark.low
     def test_logger_property(self, spider: Spider):
-        with patch('core.spiders.logging') as mock_logging:
-            log = spider.logger
+        with patch("core.spiders.logging") as mock_logging:
+            log = spider.logger  # noqa
 
         assert mock_logging.getLogger.call_count == 1
-        assert mock_logging.getLogger.call_args == call(f'spiders.{spider.name}')
+        assert mock_logging.getLogger.call_args == call(f"spiders.{spider.name}")

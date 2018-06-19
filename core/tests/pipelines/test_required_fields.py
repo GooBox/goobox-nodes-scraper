@@ -25,23 +25,23 @@ class TestRequiredFieldsPipeline:
     @pytest.fixture
     def spider(self):
         spider = Mock(spec=scrapy.Spider)
-        spider.name = 'foo_spider'
+        spider.name = "foo_spider"
         return spider
 
     @pytest.mark.mid
     def test_from_crawler(self, pipeline):
-        expected_call = [call('foo')]
+        expected_call = [call("foo")]
 
-        with patch.object(RequiredFieldsPipeline, '__init__', return_value=None) as pipeline_mock:
+        with patch.object(RequiredFieldsPipeline, "__init__", return_value=None) as pipeline_mock:
             crawler_mock = Mock()
-            crawler_mock.stats = 'foo'
+            crawler_mock.stats = "foo"
             pipeline.from_crawler(crawler_mock)
 
         assert pipeline_mock.call_args_list == expected_call
 
     @pytest.mark.high
     def test_process_item(self, item, pipeline, spider):
-        item['foo'] = 'bar'
+        item["foo"] = "bar"
 
         processed_item = pipeline.process_item(item, spider)
 
@@ -54,7 +54,7 @@ class TestRequiredFieldsPipeline:
 
     @pytest.mark.mid
     def test_process_item_drop_with_id(self, item, pipeline, spider):
-        item['id'] = 'id'
+        item["id"] = "id"
 
         with pytest.raises(DropItem):
             pipeline.process_item(item, spider)

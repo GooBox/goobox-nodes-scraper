@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "goobox-nodes-scraper"
+version = "0.1.0"
+description = "Scraper for gathering all available nodes for goobox"
+authors = ["José Antonio Perdiguero López <perdy@perdy.io>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+clinner = "^1.10"
+scrapy = "^1.5"
+scrapy-fake-useragent = "^1.1"
+geoip2 = "^2.9"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.5"
+pytest-cov = "^2.5"
+pytest-xdist = "^1.22"
+pytest-freezegun = "^0.2.0"
+coverage = "^4.5"
+ipdb = "^0.11.0"
+ipython = "^6.4"
+black = "^18.3-alpha.0"
+isort = "^4.3"
+flake8 = "^3.5"
+
+[tool.black]
+line-length = 120

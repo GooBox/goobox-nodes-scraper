@@ -18,14 +18,15 @@ RUN mkdir -p $APPDIR $LOGDIR $OUTPUTDIR
 WORKDIR $APPDIR
 
 # Install python requirements
-COPY requirements.txt requirements_test.txt constraints.txt $APPDIR/
+COPY pyproject.toml pyproject.lock $APPDIR/
 RUN apk --no-cache add $BUILD_PACKAGES && \
-    python -m pip install --upgrade pip && \
-    python -m pip install --no-cache-dir -r requirements.txt -c constraints.txt && \
-    python -m pip install --no-cache-dir -r requirements_test.txt -c constraints.txt && \
+    python -m pip install --upgrade pip poetry && \
+    python -m pip install --no-cache-dir --upgrade pip poetry && \
+    poetry install && \
+    poetry cache:clear pypi --all && \
     apk del $BUILD_PACKAGES
 
 # Copy application
 COPY . $APPDIR
 
-ENTRYPOINT ["./run"]
+ENTRYPOINT ["poetry", "run", "python", "run"]

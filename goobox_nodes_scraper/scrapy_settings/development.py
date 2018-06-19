@@ -1,12 +1,12 @@
-BOT_NAME = 'GooboxNodes'
+BOT_NAME = "GooboxNodes"
 
-SPIDER_MODULES = ['storj.spiders']
+SPIDER_MODULES = ["storj.spiders"]
 
-DEFAULT_ITEM_CLASS = 'core.items.Item'
+DEFAULT_ITEM_CLASS = "core.items.Item"
 
 DEFAULT_REQUEST_HEADERS = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Language': 'en',
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en",
 }
 
 # Obey robots.txt rules
@@ -33,16 +33,16 @@ AUTOTHROTTLE_DEBUG = False
 DOWNLOAD_DELAY = 0.2
 
 DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+    "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
+    "scrapy_fake_useragent.middleware.RandomUserAgentMiddleware": 400,
 }
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = "INFO"
 
-FAKEUSERAGENT_FALLBACK = 'Mozilla'
+FAKEUSERAGENT_FALLBACK = "Mozilla"
 
 ITEM_PIPELINES = {
-    'core.pipelines.resolve_geolocation.ResolveGeolocationPipeline': 100,
-    'core.pipelines.required_fields.RequiredFieldsPipeline': 200,
-    'core.pipelines.stats.StatsPipeline': 900,
+    "core.pipelines.resolve_geolocation.ResolveGeolocationPipeline": 100,
+    "core.pipelines.required_fields.RequiredFieldsPipeline": 200,
+    "core.pipelines.stats.StatsPipeline": 900,
 }

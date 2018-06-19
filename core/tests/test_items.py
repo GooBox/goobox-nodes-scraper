@@ -15,7 +15,7 @@ class TestRequiredFieldsMixin:
 
     @pytest.mark.high
     def test_get_required_fields(self, item):
-        expected_fields = ['foo']
+        expected_fields = ["foo"]
 
         fields = item.get_required_fields()
 
@@ -23,7 +23,7 @@ class TestRequiredFieldsMixin:
 
     @pytest.mark.low
     def test_get_schema_twice(self, item):
-        expected_fields = ['foo']
+        expected_fields = ["foo"]
 
         fields = item.get_required_fields()
         assert expected_fields == fields

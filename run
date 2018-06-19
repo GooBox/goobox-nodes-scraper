@@ -6,7 +6,8 @@ import os
 import sys
 from typing import List
 
-from clinner.command import Type as CommandType, command
+from clinner.command import Type as CommandType
+from clinner.command import command
 from clinner.run.main import Main as BaseMain
 
 SCRAPY = 'scrapy'
@@ -21,8 +22,10 @@ def scrapy(*args, **kwargs) -> List[List[str]]:
 
 class Main(BaseMain):
     commands = (
+        'clinner.run.commands.black.black',
+        'clinner.run.commands.flake8.flake8',
+        'clinner.run.commands.isort.isort',
         'clinner.run.commands.pytest.pytest',
-        'clinner.run.commands.prospector.prospector',
         'scrapy',
     )
 

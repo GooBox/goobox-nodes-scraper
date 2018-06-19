@@ -1,79 +1,73 @@
 #!/usr/bin/env python3.6
 """Run script.
 """
+import os
 import shlex
 import sys
 from typing import List
 
-import os
-from clinner.command import Type as CommandType, command
-from clinner.run.main import Main
+from clinner.command import Type as CommandType
+from clinner.command import command
+from clinner.run.main import Main as ClinnerMain
 
-APP_NAME = 'goobox-nodes-scraper'
-IMAGE_NAME = f'goobox/{APP_NAME}'
-APP_PATH = f'/srv/apps/{APP_NAME}/app'
-OUTPUT_PATH = f'/srv/apps/{APP_NAME}/output'
+APP_NAME = "goobox-nodes-scraper"
+IMAGE_NAME = f"goobox/{APP_NAME}"
+APP_PATH = f"/srv/apps/{APP_NAME}/app"
 
 
-@command(command_type=CommandType.SHELL,
-         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
-               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),),
-         parser_opts={'help': 'Build docker image'})
+@command(command_type=CommandType.SHELL, parser_opts={"help": "Build docker image"})
 def build(*args, **kwargs) -> List[List[str]]:
-    tag = ['-t', f'{kwargs["image"]}:{kwargs["tag"]}']
-    return [shlex.split(f'docker build') + tag + ['.'] + list(args)]
+    tag = ["-t", f'{kwargs["image"]}:{kwargs["tag"]}']
+    return [shlex.split(f"docker build") + tag + ["."] + list(args)]
 
 
-@command(command_type=CommandType.SHELL,
-         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
-               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),),
-         parser_opts={'help': 'Push docker image'})
+@command(command_type=CommandType.SHELL, parser_opts={"help": "Push docker image"})
 def push(*args, **kwargs) -> List[List[str]]:
     tag = [f'{kwargs["image"]}:{kwargs["tag"]}']
-    return [shlex.split(f'docker push') + tag + list(args)]
+    return [shlex.split(f"docker push") + tag + list(args)]
 
 
-@command(command_type=CommandType.SHELL,
-         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
-               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),
-               (('--source',), {'help': 'Bind source code as docker volume', 'action': 'store_true'})),
-         parser_opts={'help': 'Run command through entrypoint'})
+@command(
+    command_type=CommandType.SHELL,
+    args=((("-p", "--port"), {"help": "App port", "default": "8000"}),),
+    parser_opts={"help": "Run command through entrypoint"},
+)
 def run(*args, **kwargs) -> List[List[str]]:
     image = [f'{kwargs["image"]}:{kwargs["tag"]}']
 
-    os.makedirs('output', exist_ok=True)
-    volumes = ['-v', f'{os.path.realpath("output")}:{OUTPUT_PATH}']
-    if kwargs['source']:
-        volumes += ['-v', f'{os.getcwd()}:{APP_PATH}']
+    volumes = []
+    if kwargs.get("source", None):
+        volumes += ["-v", f"{os.getcwd()}:{APP_PATH}"]
 
-    return [shlex.split(f'docker run') + volumes + image + list(args)]
+    port = []
+    if kwargs.get("port", None):
+        port = ["-p", f'{kwargs["port"]}:8000']
+
+    return [shlex.split(f"docker run") + port + volumes + image + list(args)]
 
 
-@command(command_type=CommandType.SHELL,
-         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
-               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),
-               (('--source',), {'help': 'Bind source code as docker volume', 'action': 'store_true'})),
-         parser_opts={'help': 'Run tests'})
+@command(command_type=CommandType.SHELL, parser_opts={"help": "Run tests"})
 def test(*args, **kwargs) -> List[List[str]]:
-    image = [f'{kwargs["image"]}:{kwargs["tag"]}']
-    cmd = ['pytest']
-    volumes = ['-v', f'{os.getcwd()}:{APP_PATH}'] if kwargs['source'] else []
-
-    return [shlex.split(f'docker run') + volumes + image + cmd + list(args)]
+    return run("pytest", *args, **kwargs)
 
 
-@command(command_type=CommandType.SHELL,
-         args=((('-i', '--image'), {'help': 'Docker image name', 'default': IMAGE_NAME}),
-               (('-t', '--tag'), {'help': 'Docker tag', 'default': 'latest'}),
-               (('--source',), {'help': 'Bind source code as docker volume', 'action': 'store_true'})),
-         parser_opts={'help': 'Run lint'})
+@command(command_type=CommandType.SHELL, parser_opts={"help": "Run lint"})
 def lint(*args, **kwargs) -> List[List[str]]:
-    image = [f'{kwargs["image"]}:{kwargs["tag"]}']
-    cmd = ['prospector']
-    volumes = ['-v', f'{os.getcwd()}:{APP_PATH}'] if kwargs['source'] else []
+    kwargs["source"] = True
+    return (
+        run(*shlex.split("black --check ."), **kwargs)
+        + run(*shlex.split("flake8"), **kwargs)
+        + run(*shlex.split("isort --check-only"), **kwargs)
+    )
 
-    return [shlex.split(f'docker run') + volumes + image + cmd + list(args)]
+
+class Main(ClinnerMain):
+    def add_arguments(self, parser: "argparse.ArgumentParser"):
+        super().add_arguments(parser)
+        parser.add_argument("-i", "--image", help="Docker image name", default=IMAGE_NAME)
+        parser.add_argument("-t", "--tag", help="Docker tag", default="latest")
+        parser.add_argument("--source", help="Bind source code as docker volume", action="store_true")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(Main().run())

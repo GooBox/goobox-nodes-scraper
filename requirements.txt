@@ -1,9 +1,0 @@
-## CLI
-clinner
-
-## Scrapy
-scrapy
-scrapy-fake-useragent
-
-# Geolocation
-geoip2
